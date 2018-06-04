@@ -13,5 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="OpenBMP">
+      <UniqueIdentifier>{c5fd210f-cc52-4214-941e-5d1dd58dfaca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rgbe_lib">
+      <UniqueIdentifier>{16d8a5e7-0f7a-489b-a2f0-62a660c0f931}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="OpenHDR_main.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenBMP\OpenBMP.cpp">
+      <Filter>OpenBMP</Filter>
+    </ClCompile>
+    <ClCompile Include="rgbe_lib\rgbe_lib.cpp">
+      <Filter>rgbe_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenHDR.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OpenBMP\OpenBMP.hpp">
+      <Filter>OpenBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="rgbe_lib\rgbe_lib.h">
+      <Filter>rgbe_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenHDR.hpp">
+      <Filter>來源檔案</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

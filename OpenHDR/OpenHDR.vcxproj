@@ -143,6 +143,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="OpenBMP\OpenBMP.cpp" />
+    <ClCompile Include="OpenHDR.cpp" />
+    <ClCompile Include="OpenHDR_main.cpp" />
+    <ClCompile Include="rgbe_lib\rgbe_lib.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OpenBMP\OpenBMP.hpp" />
+    <ClInclude Include="OpenHDR.hpp" />
+    <ClInclude Include="rgbe_lib\rgbe_lib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
