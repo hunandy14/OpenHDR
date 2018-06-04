@@ -12,7 +12,6 @@ int rgbeData_size(const basic_rgbeData & hdr);
 void rgbeData_info(const basic_rgbeData & hdr);
 void rgbeRead(basic_rgbeData & hdr, string name);
 
-
 void rgb2Yxy(const float * src, float * dst, int size);
 void Yxz2rgb(const float * src, float * dst, int size);
 

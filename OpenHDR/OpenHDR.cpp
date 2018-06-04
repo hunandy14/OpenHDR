@@ -1,5 +1,4 @@
 #include <iostream>
-#include <Timer.hpp>
 using namespace std;
 
 #include "OpenBMP/OpenBMP.hpp"
@@ -29,7 +28,8 @@ void rgbeRead(basic_rgbeData& hdr, string name) {
 //====================================================================================
 // RGB Yxz 色彩模型轉換
 void rgb2Yxy(const float* src, float* dst, int size) {
-	for(unsigned i = 0; i < size; ++i) {
+//#pragma omp parallel for
+	for(int i = 0; i < size; ++i) {
 		float a, b, c;
 		a = (0.412453) * src[i*3 + 0]+
 			(0.357580) * src[i*3 + 1]+
@@ -48,7 +48,8 @@ void rgb2Yxy(const float* src, float* dst, int size) {
 	}
 }
 void Yxz2rgb(const float* src, float* dst, int size){
-	for(unsigned i = 0; i < size; ++i) {
+//#pragma omp parallel for
+	for(int i = 0; i < size; ++i) {
 		float a, b, c, newW;
 		newW = src[i*3 + 0] / src[i*3 + 2];
 		a = src[i*3 + 0];
@@ -85,7 +86,9 @@ void Mapping_basic(size_t dim, vector<float>& lumi_map, int rgb_map,
 	float avgLum = exp(logAvgLum);
 	float maxLumW = (maxLum / avgLum);
 	float coeff = (dmax*float(0.01)) / log10(maxLumW+1);
-	for(unsigned i = 0; i < N; ++i) {
+
+#pragma omp parallel for
+	for(int i = 0; i < N; ++i) {
 		lumi_map[i*dim+rgb] /= avgLum;
 		lumi_map[i*dim+rgb] = log(lumi[i*dim+rgb]+1) /
 			log(2 + pow((lumi[i*dim+rgb]/maxLumW),(log(b)/log(0.5)))*8);
@@ -106,11 +109,12 @@ void gama_fix(vector<float>& RGB_pix, float gam) {
 		slope /= ((2 - gam) * float(7.5));
 	}
 	// 校正像素
-	for(auto&& i : RGB_pix) {
-		if(i <= start) {
-			i = i*slope;
+#pragma omp parallel for
+	for (int i = 0; i < RGB_pix.size(); i++) {
+		if(RGB_pix[i] <= start) {
+			RGB_pix[i] = RGB_pix[i]*slope;
 		} else {
-			i = float(1.099)*pow(i, fgamma) - float(0.099);
+			RGB_pix[i] = float(1.099)*pow(RGB_pix[i], fgamma) - float(0.099);
 		}
 	}
 }
