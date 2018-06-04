@@ -30,7 +30,7 @@ int main(int argc, char const *argv[]) {
 
 	t.start();
 	rgb2Yxy(hdr.img.data(), Yxy.data(), imgSize);
-	Mapping_basic(Yxy);
+	basic_globalToneMapping(Yxy.data(), imgSize);
 	Yxz2rgb(Yxy.data(), hdr.img.data(), imgSize);
 	t.print("mapping");
 	rgbeBMP(hdr, "HDR_mapping.bmp");

@@ -70,25 +70,28 @@ void Yxz2rgb(const float* src, float* dst, int size){
 	}
 }
 // 全局映射
-void Mapping_basic(vector<float>& dst, int rgb, float dmax, float b)
+void basic_globalToneMapping(float* dst, int size, float dmax, float b)
 {
-	constexpr int dim = 3;
+	constexpr int dim = 3; // 幾個通道
+	constexpr int rgb = 0; // 選擇哪個通道
+	
 	float maxLum = dst[rgb];
-	for(unsigned i = 1; i < dst.size()/dim; ++i) {
+	for(unsigned i = 1; i < size; ++i) {
 		if(dst[i*dim+rgb] > maxLum)
 			maxLum = dst[i*dim+rgb];
 	}
-	size_t N = dst.size()/dim;
+
 	float logSum = 0.0;
-	for(int i = 0; i < N; ++i) 
+	for(int i = 0; i < size; ++i) 
 		logSum += log(dst[i*dim+rgb]);
-	const float logAvgLum = logSum/N;
+	
+	const float logAvgLum = logSum/size;
 	const float avgLum = exp(logAvgLum);
 	const float maxLumW = (maxLum / avgLum);
 	const float coeff = (dmax*float(0.01)) / log10(maxLumW+1.0);
 
 #pragma omp parallel for
-	for(int i = 0; i < N; ++i) {
+	for(int i = 0; i < size; ++i) {
 		auto& p = dst[i*dim+rgb];
 		p /= avgLum;
 		p = log(p+1.0) / log(2.0 + pow((p/maxLumW),(log(b)/log(0.5)))*8.0);

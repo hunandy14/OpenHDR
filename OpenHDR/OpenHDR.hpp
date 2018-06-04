@@ -21,7 +21,7 @@ void rgbeRead(basic_rgbeData & hdr, string name);
 void rgb2Yxy(const float * src, float * dst, int size);
 void Yxz2rgb(const float * src, float * dst, int size);
 
-void Mapping_basic(vector<float>& dst, int rgb=0, float dmax=HDR_dmax, float b=HDR_b);
+void basic_globalToneMapping(float * dst, int size, float dmax=HDR_dmax, float b=HDR_b);
 void gama_fix(vector<float>& RGB_pix, float gam=HDR_gama);
 
 void rgbeBMP(const basic_rgbeData & hdr, string name);
