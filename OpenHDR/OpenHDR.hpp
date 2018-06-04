@@ -1,6 +1,12 @@
 #pragma once
 #include "rgbe_lib/rgbe_lib.h"
 
+#define HDR_dmax 100.0
+#define HDR_b 0.85
+#define HDR_gama 2.2
+
+
+
 // ¸ê®Æµ²ºc
 struct basic_rgbeData {
 	int width;
@@ -15,7 +21,7 @@ void rgbeRead(basic_rgbeData & hdr, string name);
 void rgb2Yxy(const float * src, float * dst, int size);
 void Yxz2rgb(const float * src, float * dst, int size);
 
-void Mapping_basic(size_t dim, vector<float>& lumi_map, int rgb_map, vector<float>& lumi, int rgb, float dmax, float b);
-void gama_fix(vector<float>& RGB_pix, float gam);
+void Mapping_basic(vector<float>& dst, int rgb=0, float dmax=HDR_dmax, float b=HDR_b);
+void gama_fix(vector<float>& RGB_pix, float gam=HDR_gama);
 
 void rgbeBMP(const basic_rgbeData & hdr, string name);

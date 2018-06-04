@@ -70,36 +70,36 @@ void Yxz2rgb(const float* src, float* dst, int size){
 	}
 }
 // 全局映射
-void Mapping_basic(size_t dim, vector<float>& lumi_map, int rgb_map,
-	vector<float>& lumi, int rgb, float dmax, float b)
+void Mapping_basic(vector<float>& dst, int rgb, float dmax, float b)
 {
-	float maxLum = lumi[0*dim+rgb];
-	for(unsigned i = 1; i < lumi.size()/dim; ++i) {
-		if(lumi[i*dim+rgb] > maxLum)
-			maxLum = lumi[i*dim+rgb];
+	constexpr int dim = 3;
+	float maxLum = dst[rgb];
+	for(unsigned i = 1; i < dst.size()/dim; ++i) {
+		if(dst[i*dim+rgb] > maxLum)
+			maxLum = dst[i*dim+rgb];
 	}
-	size_t N = lumi.size()/dim;
-	float logSum = 0;
-	for(unsigned i = 0; i < N; ++i)
-		logSum += log(lumi[i*dim+rgb]);
-	float logAvgLum = logSum/N;
-	float avgLum = exp(logAvgLum);
-	float maxLumW = (maxLum / avgLum);
-	float coeff = (dmax*float(0.01)) / log10(maxLumW+1);
+	size_t N = dst.size()/dim;
+	float logSum = 0.0;
+	for(int i = 0; i < N; ++i) 
+		logSum += log(dst[i*dim+rgb]);
+	const float logAvgLum = logSum/N;
+	const float avgLum = exp(logAvgLum);
+	const float maxLumW = (maxLum / avgLum);
+	const float coeff = (dmax*float(0.01)) / log10(maxLumW+1.0);
 
 #pragma omp parallel for
 	for(int i = 0; i < N; ++i) {
-		lumi_map[i*dim+rgb] /= avgLum;
-		lumi_map[i*dim+rgb] = log(lumi[i*dim+rgb]+1) /
-			log(2 + pow((lumi[i*dim+rgb]/maxLumW),(log(b)/log(0.5)))*8);
-		lumi_map[i*dim+rgb] *= coeff;
+		auto& p = dst[i*dim+rgb];
+		p /= avgLum;
+		p = log(p+1.0) / log(2.0 + pow((p/maxLumW),(log(b)/log(0.5)))*8.0);
+		p *= coeff;
 	}
 }
 // gama校正
 void gama_fix(vector<float>& RGB_pix, float gam) {
+	const float fgamma = (0.45/gam)*2.0;
 	float slope = 4.5;
 	float start = 0.018;
-	float fgamma = (0.45/gam)*2;
 	// 判定係數
 	if(gam >= float(2.1)) {
 		start /= ((gam - 2) * float(7.5));

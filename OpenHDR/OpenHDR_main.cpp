@@ -30,14 +30,14 @@ int main(int argc, char const *argv[]) {
 
 	t.start();
 	rgb2Yxy(hdr.img.data(), Yxy.data(), imgSize);
-	Mapping_basic(3, Yxy, 0, Yxy, 0, 100, 0.85);
+	Mapping_basic(Yxy);
 	Yxz2rgb(Yxy.data(), hdr.img.data(), imgSize);
 	t.print("mapping");
 	rgbeBMP(hdr, "HDR_mapping.bmp");
 
 	// gama fix
 	t.start();
-	gama_fix(hdr.img, 2.2);
+	gama_fix(hdr.img);
 	t.print("gamafix");
 	rgbeBMP(hdr, "HDR_mapping+gamafix.bmp");
 
