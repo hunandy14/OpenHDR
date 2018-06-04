@@ -6,6 +6,8 @@ using namespace std;
 
 
 //====================================================================================
+// rgbeData function
+//====================================================================================
 int rgbeData_size(const basic_rgbeData& hdr) {
 	return hdr.width * hdr.height;
 }
@@ -13,7 +15,7 @@ void rgbeData_info(const basic_rgbeData& hdr) {
 	cout << "width=" << hdr.width << endl;
 	cout << "height=" << hdr.height << endl;
 }
-void rgbeRead(basic_rgbeData& hdr, string name) {
+void rgbe_read(basic_rgbeData& hdr, string name) {
 	FILE* hdrFile;
 	fopen_s(&hdrFile, name.c_str(), "rb");
 
@@ -23,10 +25,26 @@ void rgbeRead(basic_rgbeData& hdr, string name) {
 
 	fclose(hdrFile);
 }
-
+void rgbe_writeBMP(const basic_rgbeData& hdr, string name) {
+	bool overfix = 1;
+	ImgData LDRimg(hdr.width, hdr.height, 24);
+	for (size_t i = 0; i < LDRimg.size(); i++) {
+		float p = hdr.img[i]*255.0;
+		if (overfix == 1) {
+			if (p > 255) {
+				p = 255;
+			} else if (p < 0) {
+				p = 0;
+			}
+		}
+		LDRimg[i] = p;
+	}
+	LDRimg.bmp(name);
+}
 
 //====================================================================================
-// RGB Yxz 色彩模型轉換
+// ToneMapping function
+//====================================================================================
 void rgb2Yxy(const float* src, float* dst, int size) {
 //#pragma omp parallel for
 	for(int i = 0; i < size; ++i) {
@@ -69,8 +87,7 @@ void Yxz2rgb(const float* src, float* dst, int size){
 		dst[i*3 + 2] +=  float(1.057311)*c;
 	}
 }
-// 全局映射
-void basic_globalToneMapping(float* dst, int size, float dmax, float b)
+void globalToneMapping(float* dst, int size, float dmax, float b)
 {
 	constexpr int dim = 3; // 幾個通道
 	constexpr int rgb = 0; // 選擇哪個通道
@@ -98,8 +115,7 @@ void basic_globalToneMapping(float* dst, int size, float dmax, float b)
 		p *= coeff;
 	}
 }
-// gama校正
-void gama_fix(vector<float>& RGB_pix, float gam) {
+void gama_fix(float* dst, int size, float gam) {
 	const float fgamma = (0.45/gam)*2.0;
 	float slope = 4.5;
 	float start = 0.018;
@@ -113,28 +129,13 @@ void gama_fix(vector<float>& RGB_pix, float gam) {
 	}
 	// 校正像素
 #pragma omp parallel for
-	for (int i = 0; i < RGB_pix.size(); i++) {
-		if(RGB_pix[i] <= start) {
-			RGB_pix[i] = RGB_pix[i]*slope;
+	for (int i = 0; i < size*3; i++) {
+		if(dst[i] <= start) {
+			dst[i] = dst[i]*slope;
 		} else {
-			RGB_pix[i] = float(1.099)*pow(RGB_pix[i], fgamma) - float(0.099);
+			dst[i] = float(1.099)*pow(dst[i], fgamma) - float(0.099);
 		}
 	}
 }
-// 輸出圖片
-void rgbeBMP(const basic_rgbeData& hdr, string name) {
-	bool overfix = 1;
-	ImgData LDRimg(hdr.width, hdr.height, 24);
-	for (size_t i = 0; i < LDRimg.size(); i++) {
-		float p = hdr.img[i]*255.0;
-		if (overfix == 1) {
-			if (p > 255) {
-				p = 255;
-			} else if (p < 0) {
-				p = 0;
-			}
-		}
-		LDRimg[i] = p;
-	}
-	LDRimg.bmp(name);
-}
+
+//====================================================================================
