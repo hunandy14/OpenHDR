@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 
+#include "Timer.hpp"
 #include "OpenBMP/OpenBMP.hpp"
 #include "OpenHDR.hpp"
 
@@ -15,7 +16,7 @@ void rgbeData_info(const basic_rgbeData& hdr) {
 	cout << "width=" << hdr.width << endl;
 	cout << "height=" << hdr.height << endl;
 }
-void rgbe_read(basic_rgbeData& hdr, string name) {
+void rgbeData_read(basic_rgbeData& hdr, string name) {
 	FILE* hdrFile;
 	fopen_s(&hdrFile, name.c_str(), "rb");
 
@@ -25,7 +26,7 @@ void rgbe_read(basic_rgbeData& hdr, string name) {
 
 	fclose(hdrFile);
 }
-void rgbe_writeBMP(const basic_rgbeData& hdr, string name) {
+void rgbeData_writeBMP(const basic_rgbeData& hdr, string name) {
 	bool overfix = 1;
 	ImgData LDRimg(hdr.width, hdr.height, 24);
 	for (size_t i = 0; i < LDRimg.size(); i++) {
@@ -138,4 +139,30 @@ void gama_fix(float* dst, int size, float gam) {
 	}
 }
 
+void testMapping(string name) {
+	Timer t;
+
+	// read file
+	basic_rgbeData hdr;
+	rgbeData_read(hdr, name);
+	rgbeData_info(hdr);
+	//rgbeData_writeBMP(hdr, "resultIMG\HDR_non.bmp");
+
+	// Mpping
+	int imgSize = rgbeData_size(hdr);
+	vector<float> Yxy(imgSize*3);
+
+	t.start();
+	rgb2Yxy(hdr.img.data(), Yxy.data(), imgSize);
+	globalToneMapping(Yxy.data(), imgSize);
+	Yxz2rgb(Yxy.data(), hdr.img.data(), imgSize);
+	t.print("mapping");
+	//rgbeData_writeBMP(hdr, "resultIMG\HDR_mapping.bmp");
+
+	// gama fix
+	t.start();
+	gama_fix(hdr.img.data(), imgSize);
+	t.print("gamafix");
+	rgbeData_writeBMP(hdr, "resultIMG/HDR_IMG.bmp");
+}
 //====================================================================================
