@@ -159,9 +159,10 @@ void testMapping(string name) {
 	t.print("mapping");
 	//rgbeData_writeBMP(hdr, "resultIMG\HDR_mapping.bmp");
 
+	cout << hdr.info.gamma << endl;
 	// gama fix
 	t.start();
-	gama_fix(hdr.img.data(), imgSize);
+	gama_fix(hdr.img.data(), imgSize, 2.2);
 	t.print("gamafix");
 	rgbeData_writeBMP(hdr, "resultIMG/HDR_IMG.bmp");
 }
