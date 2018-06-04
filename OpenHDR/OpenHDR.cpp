@@ -10,7 +10,7 @@ using namespace std;
 // rgbeData function
 //====================================================================================
 int rgbeData_size(const basic_rgbeData& hdr) {
-	return hdr.width * hdr.height;
+	return (hdr.width * hdr.height);
 }
 void rgbeData_info(const basic_rgbeData& hdr) {
 	cout << "width=" << hdr.width << endl;
