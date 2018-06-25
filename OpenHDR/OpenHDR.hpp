@@ -19,7 +19,7 @@ void rgbeData_read(basic_rgbeData & hdr, std::string name);
 void rgbeData_writeBMP(const basic_rgbeData & hdr, std::string name);
 
 void rgb2Yxy(const float * src, float * dst, int size);
-void Yxz2rgb(const float * src, float * dst, int size);
+void Yxy2rgb(const float * src, float * dst, int size);
 void globalToneMapping(float * dst, int size, float dmax=HDR_dmax, float b=HDR_b);
 void gama_fix(float* dst, int size, float gam=HDR_gama);
 
@@ -44,7 +44,7 @@ public:
 		// Mpping
 		rgb2Yxy(hdr.img.data(), Yxy.data(), imgSize);
 		globalToneMapping(Yxy.data(), imgSize, dmax, b);
-		Yxz2rgb(Yxy.data(), hdr.img.data(), imgSize);
+		Yxy2rgb(Yxy.data(), hdr.img.data(), imgSize);
 		// gama fix
 		gama_fix(hdr.img.data(), imgSize, gam);
 	}

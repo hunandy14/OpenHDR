@@ -3,6 +3,8 @@
 
 # UserDefine
 *.bmp
+*.o
+*.exe
 
 # User-specific files
 *.suo

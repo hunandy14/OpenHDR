@@ -67,7 +67,7 @@ void rgb2Yxy(const float* src, float* dst, int size) {
 		dst[i*3 + 2] = b / (a+b+c);
 	}
 }
-void Yxz2rgb(const float* src, float* dst, int size){
+void Yxy2rgb(const float* src, float* dst, int size){
 //#pragma omp parallel for
 	for(int i = 0; i < size; ++i) {
 		float a, b, c, newW;
@@ -156,7 +156,7 @@ void testMapping(string name) {
 	t.start();
 	rgb2Yxy(hdr.img.data(), Yxy.data(), imgSize);
 	globalToneMapping(Yxy.data(), imgSize);
-	Yxz2rgb(Yxy.data(), hdr.img.data(), imgSize);
+	Yxy2rgb(Yxy.data(), hdr.img.data(), imgSize);
 	t.print("mapping");
 	//rgbeData_writeBMP(hdr, "resultIMG\HDR_mapping.bmp");
 
