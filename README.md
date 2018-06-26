@@ -1,4 +1,9 @@
 ## OpenHDR
+詳細說明可以參考我的blog，這裡有詳細對函式說明  
+https://charlottehong.blogspot.com/2018/06/hdr-tonemapping.html  
+
+
+
 #### 參考論文：  
 細節與對比強化之高動態範圍影像顯示方法  
 High Dynamic Range Image Display with Detail and Contrast Enhancement  
