@@ -1,4 +1,12 @@
-﻿#pragma once
+﻿/*****************************************************************
+Name : OpenHDR
+Date : 2018/06/04
+By   : CharlotteHonG
+Final: 2018/07/02
+
+site : https://charlottehong.blogspot.com/2018/06/hdr-tonemapping.html
+*****************************************************************/
+#pragma once
 #include "rgbe_lib/rgbe_lib.h"
 
 #define HDR_dmax 100.0

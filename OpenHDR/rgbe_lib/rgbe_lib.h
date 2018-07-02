@@ -1,3 +1,4 @@
+// rgbe source: http://www.graphics.cornell.edu/~bjw/rgbe/
 #pragma once
 
 #ifndef _H_RGBE

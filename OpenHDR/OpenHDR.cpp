@@ -1,4 +1,12 @@
-﻿#include <iostream>
+﻿/*****************************************************************
+Name : OpenHDR
+Date : 2018/06/04
+By   : CharlotteHonG
+Final: 2018/07/02
+
+site : https://charlottehong.blogspot.com/2018/06/hdr-tonemapping.html
+*****************************************************************/
+#include <iostream>
 #include <cmath>
 using namespace std;
 
