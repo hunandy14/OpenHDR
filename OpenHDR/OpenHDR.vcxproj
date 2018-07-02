@@ -151,7 +151,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="OpenBMP\OpenBMP.cpp" />
     <ClCompile Include="OpenHDR.cpp" />
     <ClCompile Include="OpenHDR_main.cpp" />
     <ClCompile Include="rgbe_lib\rgbe_lib.cpp" />

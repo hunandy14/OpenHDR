@@ -24,9 +24,6 @@
     <ClCompile Include="OpenHDR_main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="OpenBMP\OpenBMP.cpp">
-      <Filter>OpenBMP</Filter>
-    </ClCompile>
     <ClCompile Include="rgbe_lib\rgbe_lib.cpp">
       <Filter>rgbe_lib</Filter>
     </ClCompile>
@@ -35,14 +32,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OpenBMP\OpenBMP.hpp">
-      <Filter>OpenBMP</Filter>
-    </ClInclude>
     <ClInclude Include="rgbe_lib\rgbe_lib.h">
       <Filter>rgbe_lib</Filter>
     </ClInclude>
     <ClInclude Include="OpenHDR.hpp">
       <Filter>來源檔案</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenBMP\OpenBMP.hpp">
+      <Filter>OpenBMP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
