@@ -1,4 +1,4 @@
-/*****************************************************************
+ï»¿/*****************************************************************
 Name : OpenBMP
 Date : 2017/06/12
 By   : CharlotteHonG
@@ -9,8 +9,8 @@ Final: 2018/06/01
 #include <vector>
 
 //----------------------------------------------------------------
-// ÀÉ®×ÀÉÀY (BITMAPFILEHEADER)
-#pragma pack(2) // ½Õ¾ã¹ï»ô
+// æª”æ¡ˆæª”é ­ (BITMAPFILEHEADER)
+#pragma pack(2) // èª¿æ•´å°é½Š
 struct BmpFileHeader{
 	uint16_t bfTybe=0x4d42;
 	uint32_t bfSize;
@@ -30,7 +30,7 @@ struct BmpFileHeader{
 	// ostream
 	friend std::ostream& operator<<(std::ostream& os, const BmpFileHeader& obj);
 };
-#pragma pack() // «ì´_¹ï»ô¬°¹w³]
+#pragma pack() // æ¢å¾©å°é½Šç‚ºé è¨­
 inline std::ofstream& operator<<(std::ofstream& os, const BmpFileHeader& obj){
 	os.write((char*)&obj, sizeof(obj));
 	return os;
@@ -52,8 +52,8 @@ inline std::ostream& operator<<(std::ostream& os, const BmpFileHeader& obj){
 }
 
 
-// ¹Ï¤ù¸ê°T (BITMAPINFOHEADER)
-#pragma pack(2) // ½Õ¾ã¹ï»ô
+// åœ–ç‰‡è³‡è¨Š (BITMAPINFOHEADER)
+#pragma pack(2) // èª¿æ•´å°é½Š
 struct BmpInfoHeader{
 	uint32_t biSize=40;
 	uint32_t biWidth;
@@ -80,7 +80,7 @@ struct BmpInfoHeader{
 	// ostream
 	friend std::ostream& operator<<(std::ostream& os, const BmpInfoHeader& obj);
 };
-#pragma pack() // «ì´_¹ï»ô¬°¹w³]
+#pragma pack() // æ¢å¾©å°é½Šç‚ºé è¨­
 inline std::ofstream& operator<<(std::ofstream& os, const BmpInfoHeader& obj){
 	os.write((char*)&obj, sizeof(obj));
 	return os;
@@ -114,37 +114,37 @@ class OpenBMP {
 private:
 	using uch = unsigned char;
 public:
-	// RGB Âà¦Ç¶¥¤½¦¡
+	// RGB è½‰ç°éšå…¬å¼
 	static inline uch rgb2gray(const uch* p) {
 		return ((
 			19595 * (*(p+0))+
 			38469 * (*(p+1))+
 			7472  * (*(p+2))) >> 16);
 	}
-	// Âà¦Ç¶¥
+	// è½‰ç°éš
 	static void raw2gray(std::vector<uch>& dst, const std::vector<uch>& src) {
 		if (&dst == &src) {
-			// ¦P¤@­Ó¨Ó·½Âà´«§¹¦Aresize
+			// åŒä¸€å€‹ä¾†æºè½‰æ›å®Œå†resize
 			for (int i = 0; i < src.size()/3; ++i)
 				dst[i] = rgb2gray(&src[i*3]);
 			dst.resize(src.size()/3);
 		} else {
-			// ³q±`±¡ªp¥ı³]¸m¦n¤j¤p¤~Âà´«
+			// é€šå¸¸æƒ…æ³å…ˆè¨­ç½®å¥½å¤§å°æ‰è½‰æ›
 			dst.resize(src.size()/3);
 			for (int i = 0; i < src.size()/3; ++i)
 				dst[i] = rgb2gray(&src[i*3]);
 		}
 	}
 public:
-	// Åª Bmp ÀÉ®×
+	// è®€ Bmp æª”æ¡ˆ
 	static void bmpRead(std::vector<uch>& dst, std::string name,
 		uint32_t* width=nullptr, uint32_t* height=nullptr, uint16_t* bits=nullptr);
-	// ¼g Bmp ÀÉ
+	// å¯« Bmp æª”
 	static void bmpWrite(std::string name, const std::vector<uch>& src,
 		uint32_t width, uint32_t height, uint16_t bits=24);
-	// Åª Raw ÀÉ
+	// è®€ Raw æª”
 	static void rawRead(std::vector<uch>& dst, std::string name);
-	// ¼g Raw ÀÉ
+	// å¯« Raw æª”
 	static void rawWrite(std::string name, const std::vector<uch>& src);
 };
 
@@ -159,10 +159,10 @@ struct basic_ImgData {
 
 
 class ImgData: public basic_ImgData {
-private: // «¬ºA«Å§i
+private: // å‹æ…‹å®£å‘Š
 	using uch = unsigned char;
 
-public: // «Øºc¤l
+public: // å»ºæ§‹å­
 	ImgData() = default;
 	ImgData(std::string name) {
 		OpenBMP::bmpRead(raw_img, name, &width, &height, &bits);
@@ -177,7 +177,7 @@ public: // «Øºc¤l
 	}
 	explicit ImgData(basic_ImgData& imgData): basic_ImgData(imgData) {}
 
-public: // ¦s¨ú¤èªk
+public: // å­˜å–æ–¹æ³•
 	inline uch& operator[](size_t idx) {
 		return this->raw_img[idx];
 	}
@@ -190,34 +190,34 @@ public: // ¦s¨ú¤èªk
 	inline const uch* at2d(size_t y, size_t x) const {
 		return &raw_img[(y*width + x) *(bits>>3)];
 	}
-	// ½u©Ê´¡­È(§Ö³t´ú¸Õ¥Î, RGB®Ä²v«Ü®t)
+	// ç·šæ€§æ’å€¼(å¿«é€Ÿæ¸¬è©¦ç”¨, RGBæ•ˆç‡å¾ˆå·®)
 	std::vector<double> at2d_linear(double y, double x) const { 
 		std::vector<double> RGB(bits>>3);
-		// ¾ã¼Æ´N¤£ºâ¤F
+		// æ•´æ•¸å°±ä¸ç®—äº†
 		if (y==(int)y && x==(int)x) {
 			auto p = this->at2d(y, x);
 			for (int i = 0; i < RGB.size(); i++)
 				RGB[i] = static_cast<double>(p[i]);
 			return RGB;
 		}
-		// Àò¨ú¾FÂI
+		// ç²å–é„°é»
 		int x0 = (int)(x);
 		int x1 = (x)==(int)(x)? (int)(x): (int)(x+1.0);
 		int y0 = (int)(y);
 		int y1 = (y)==(int)(y)? (int)(y): (int)(y+1.0);
-		// Àò¨ú¤ñ¨Ò
+		// ç²å–æ¯”ä¾‹
 		double dx1 = x -  x0;
 		double dx2 = 1 - dx1;
 		double dy1 = y -  y0;
 		double dy2 = 1 - dy1;
-		// ­pºâ´¡­È
+		// è¨ˆç®—æ’å€¼
 		for (int i = 0; i < RGB.size(); i++) {
-			// Àò¨úÂI
+			// ç²å–é»
 			const double& A = raw_img[(y0*width + x0)*(bits>>3) + i];
 			const double& B = raw_img[(y0*width + x1)*(bits>>3) + i];
 			const double& C = raw_img[(y1*width + x0)*(bits>>3) + i];
 			const double& D = raw_img[(y1*width + x1)*(bits>>3) + i];
-			// ­¼¥X¤ñ¨Ò(­n¥æ¤e)
+			// ä¹˜å‡ºæ¯”ä¾‹(è¦äº¤å‰)
 			double AB = A*dx2 + B*dx1;
 			double CD = C*dx2 + D*dx1;
 			RGB[i] = AB*dy2 + CD*dy1;
@@ -225,7 +225,7 @@ public: // ¦s¨ú¤èªk
 		return RGB;
 	}
 
-public: // ¤j¤p¤èªk
+public: // å¤§å°æ–¹æ³•
 	friend inline bool operator!=(const ImgData& lhs, const ImgData& rhs) {
 		return !(lhs == rhs);
 	}
@@ -260,7 +260,7 @@ public: // ¤j¤p¤èªk
 		std::cout << "  - img bits  = " << this->bits   << "\n\n";
 	}
 
-public: // ¦Û­q¤èªk
+public: // è‡ªè¨‚æ–¹æ³•
 	void bmp(std::string name) const {
 		OpenBMP::bmpWrite(name, raw_img, width, height, bits);
 	}
@@ -283,10 +283,10 @@ public: // ¦Û­q¤èªk
 		return img;
 	}
 	ImgData toSnip (uint32_t width, uint32_t height, uint32_t y=0, uint32_t x=0) const {
-		// ÀË¬d¶W¹LÃä¬É
+		// æª¢æŸ¥è¶…éé‚Šç•Œ
 		if (width+x > this->width || height+y > this->height)
 			throw std::out_of_range("toSnip() out of range");
-		// ¶}©lÂ^¨ú
+		// é–‹å§‹æ“·å–
 		ImgData img(width, height, this->bits);
 		for (int j = 0; j < img.height; j++) {
 			for (int i = 0; i < img.width; i++) {
@@ -299,7 +299,7 @@ public: // ¦Û­q¤èªk
 		}
 		return img;
 	}
-public: // µe½u
+public: // ç•«ç·š
 
 };
 

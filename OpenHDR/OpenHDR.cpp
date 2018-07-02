@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <cmath>
 using namespace std;
 
@@ -91,8 +91,8 @@ void Yxy2rgb(const float* src, float* dst, int size){
 }
 void globalToneMapping(float* dst, int size, float dmax, float b)
 {
-	constexpr int dim = 3; // ´X­Ó³q¹D
-	constexpr int rgb = 0; // ¿ï¾Ü­ş­Ó³q¹D
+	constexpr int dim = 3; // å¹¾å€‹é€šé“
+	constexpr int rgb = 0; // é¸æ“‡å“ªå€‹é€šé“
 	
 	float maxLum = dst[rgb];
 	for(unsigned i = 1; i < size; ++i) {
@@ -121,7 +121,7 @@ void gama_fix(float* dst, int size, float gam) {
 	const float fgamma = (0.45/gam)*2.0;
 	float slope = 4.5;
 	float start = 0.018;
-	// §P©w«Y¼Æ
+	// åˆ¤å®šä¿‚æ•¸
 	if(gam >= float(2.1)) {
 		start /= ((gam - 2) * float(7.5));
 		slope *= ((gam - 2) * float(7.5));
@@ -129,7 +129,7 @@ void gama_fix(float* dst, int size, float gam) {
 		start *= ((2 - gam) * float(7.5));
 		slope /= ((2 - gam) * float(7.5));
 	}
-	// ®Õ¥¿¹³¯À
+	// æ ¡æ­£åƒç´ 
 #pragma omp parallel for
 	for (int i = 0; i < size*3; i++) {
 		if(dst[i] <= start) {

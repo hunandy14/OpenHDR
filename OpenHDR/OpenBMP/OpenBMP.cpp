@@ -1,4 +1,4 @@
-/*****************************************************************
+ï»¿/*****************************************************************
 Name : OpenBMP
 Date : 2017/06/14
 By   : CharlotteHonG
@@ -14,18 +14,18 @@ Final: 2018/06/01
 using namespace std;
 using uch = unsigned char;
 //----------------------------------------------------------------
-// Åª Bmp ÀÉ®×
+// è®€ Bmp æª”æ¡ˆ
 void OpenBMP::bmpRead(vector<uch>& dst, string name,
 	uint32_t* width, uint32_t* height, uint16_t* bits) {
 	ifstream bmp(name.c_str(), ios::binary);
 	bmp.exceptions(ifstream::failbit|ifstream::badbit);
 	bmp.seekg(0, ios::beg);
-	// ÅªÀÉÀY
+	// è®€æª”é ­
 	BmpFileHeader file_h;
 	bmp >> file_h;
 	BmpInfoHeader info_h;
 	bmp >> info_h;
-	// ¦^¶Ç¸ê°T
+	// å›žå‚³è³‡è¨Š
 	if (width  != nullptr && 
 		height != nullptr && 
 		bits   != nullptr)
@@ -34,7 +34,7 @@ void OpenBMP::bmpRead(vector<uch>& dst, string name,
 		*height = info_h.biHeight;
 		*bits   = info_h.biBitCount;
 	}
-	// Åª Raw
+	// è®€ Raw
 	bmp.seekg(file_h.bfOffBits, ios::beg);
 	dst.resize(info_h.biWidth * info_h.biHeight * (info_h.biBitCount/8));
 	size_t realW = info_h.biWidth * info_h.biBitCount/8.0;
@@ -42,39 +42,39 @@ void OpenBMP::bmpRead(vector<uch>& dst, string name,
 	char* p = reinterpret_cast<char*>(dst.data());
 	for(int j = info_h.biHeight-1; j >= 0; --j) {
 		for(unsigned i = 0; i < info_h.biWidth; ++i) {
-			// ¨Ó·½¬O rgb
+			// ä¾†æºæ˜¯ rgb
 			if(info_h.biBitCount == 24) {
 				bmp.read(p + j*info_h.biWidth*3+i*3 + 2, 1);
 				bmp.read(p + j*info_h.biWidth*3+i*3 + 1, 1);
 				bmp.read(p + j*info_h.biWidth*3+i*3 + 0, 1);
 			}
-			// ¨Ó·½¬O gray
+			// ä¾†æºæ˜¯ gray
 			else if(info_h.biBitCount == 8) {
 				bmp.read(p + j*info_h.biWidth+i, 1);
 			}
 		}
-		bmp.seekg(alig, ios::cur); // ¸õ¶} 4bite ¹ï»ôªºªÅ®æ
+		bmp.seekg(alig, ios::cur); // è·³é–‹ 4bite å°é½Šçš„ç©ºæ ¼
 	}
 }
-// ¼g Bmp ÀÉ
+// å¯« Bmp æª”
 void OpenBMP::bmpWrite( string name, const vector<uch>& src,
 	uint32_t width, uint32_t height, uint16_t bits)
 {
-	// ÀÉ®×¸ê°T
+	// æª”æ¡ˆè³‡è¨Š
 	BmpFileHeader file_h(width, height, bits);
-	// ¹Ï¤ù¸ê°T
+	// åœ–ç‰‡è³‡è¨Š
 	BmpInfoHeader info_h(width, height, bits);
-	// ¼gÀÉ
+	// å¯«æª”
 	ofstream bmp(name, ios::binary);
 	bmp.exceptions(ifstream::failbit|ifstream::badbit);
 	bmp << file_h << info_h;
-	// ¼g½Õ¦â½L
+	// å¯«èª¿è‰²ç›¤
 	if(bits == 8) {
 		for(unsigned i = 0; i < 256; ++i) {
 			bmp << uch(i) << uch(i) << uch(i) << uch(0);
 		}
 	}
-	// ¼g¤J¹Ï¤ù¸ê°T
+	// å¯«å…¥åœ–ç‰‡è³‡è¨Š
 	size_t realW = info_h.biWidth * info_h.biBitCount/8.0;
 	size_t alig = (realW*3) % 4;
 
@@ -89,14 +89,14 @@ void OpenBMP::bmpWrite( string name, const vector<uch>& src,
 				bmp << src[(j*width+i)];
 			}
 		}
-		// ¹ï»ô4byte
+		// å°é½Š4byte
 		for(unsigned i = 0; i < alig; ++i) {
 			bmp << uch(0);
 		}
 	}
 }
 //----------------------------------------------------------------
-// Åª Raw ÀÉ
+// è®€ Raw æª”
 void OpenBMP::rawRead(std::vector<uch>& dst, std::string name) {
 	std::ifstream raw_file(name.c_str(), 
 		std::ios::binary | std::ios::ate);
@@ -106,7 +106,7 @@ void OpenBMP::rawRead(std::vector<uch>& dst, std::string name) {
 	raw_file.read(reinterpret_cast<char*>(dst.data()), dst.size());
 	raw_file.close();
 }
-// ¼g Raw ÀÉ
+// å¯« Raw æª”
 void OpenBMP::rawWrite(std::string name, const std::vector<uch>& src) {
 	std::ofstream raw_file(name.c_str(), std::ios::binary);
 	raw_file.exceptions(std::ifstream::failbit|std::ifstream::badbit);

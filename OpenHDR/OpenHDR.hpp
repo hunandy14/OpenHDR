@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include "rgbe_lib/rgbe_lib.h"
 
 #define HDR_dmax 100.0
@@ -6,7 +6,7 @@
 #define HDR_gama 2.2
 
 //====================================================================================
-// ∏ÍÆ∆µ≤∫c
+// Ë≥áÊñôÁµêÊßã
 struct basic_rgbeData {
 	int width;
 	int height;
