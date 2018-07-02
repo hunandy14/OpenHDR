@@ -2,10 +2,8 @@
 #include <cmath>
 using namespace std;
 
-#include "Timer.hpp"
 #include "OpenBMP/OpenBMP.hpp"
 #include "OpenHDR.hpp"
-
 
 //====================================================================================
 // rgbeData function
@@ -141,8 +139,6 @@ void gama_fix(float* dst, int size, float gam) {
 }
 
 void testMapping(string name) {
-	Timer t;
-
 	// read file
 	basic_rgbeData hdr;
 	rgbeData_read(hdr, name);
@@ -153,18 +149,13 @@ void testMapping(string name) {
 	int imgSize = rgbeData_size(hdr);
 	vector<float> Yxy(imgSize*3);
 
-	t.start();
 	rgb2Yxy(hdr.img.data(), Yxy.data(), imgSize);
 	globalToneMapping(Yxy.data(), imgSize);
 	Yxy2rgb(Yxy.data(), hdr.img.data(), imgSize);
-	t.print("mapping");
 	//rgbeData_writeBMP(hdr, "resultIMG\HDR_mapping.bmp");
 
 	cout << hdr.info.gamma << endl;
-	// gama fix
-	t.start();
 	gama_fix(hdr.img.data(), imgSize, 2.2);
-	t.print("gamafix");
 	rgbeData_writeBMP(hdr, "resultIMG/HDR_IMG.bmp");
 }
 //====================================================================================
